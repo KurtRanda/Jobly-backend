@@ -16,7 +16,7 @@ const PORT = +process.env.PORT || 3001;
 function getDatabaseUri() {
   return (process.env.NODE_ENV === "test")
     ? "jobly_test" // Use a local or test database during testing
-    : process.env.DATABASE_URL || "jobly"; // Default to Supabase connection or local
+    : process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/jobly"; // Default to Supabase connection or local
 }
 
 // Configure database SSL settings for Supabase

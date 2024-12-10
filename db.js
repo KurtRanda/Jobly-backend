@@ -11,7 +11,10 @@ if (process.env.NODE_ENV === "production") {
   db = new Client(DB_CONFIG); // Use DB_CONFIG from config.js
 } else {
   db = new Client({
-    connectionString: getDatabaseUri(), // Use getDatabaseUri for local/testing environments
+    connectionString: getDatabaseUri(),
+    ssl: {
+      rejectUnauthorized: false, // Required for connecting to Supabase
+    }, // Use getDatabaseUri for local/testing environments
   });
 }
 
