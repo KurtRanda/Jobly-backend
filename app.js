@@ -3,25 +3,29 @@
 /** Express app for jobly. */
 
 const express = require("express");
-const cors = require("cors");
-
+const cors = require("cors"); // Ensure this is declared only once
 const { NotFoundError } = require("./expressError");
-
 const { authenticateJWT } = require("./middleware/auth");
 const authRoutes = require("./routes/auth");
 const companiesRoutes = require("./routes/companies");
 const usersRoutes = require("./routes/users");
 const jobsRoutes = require("./routes/jobs");
-
 const morgan = require("morgan");
 
 const app = express();
 
-app.use(cors());
+// Enable CORS for frontend
+app.use(cors({
+  origin: ["https://jobly-frontend-axcj.onrender.com"], // Add your frontend URL
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  allowedHeaders: ["Authorization", "Content-Type"],
+}));
+
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
+// Routes
 app.use("/auth", authRoutes);
 app.use("/companies", companiesRoutes);
 app.use("/users", usersRoutes);
@@ -31,18 +35,11 @@ app.use("/jobs", jobsRoutes);
 app.get("/", (req, res) => {
   res.send("Jobly backend is running!");
 });
+
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
   return next(new NotFoundError());
 });
-
-const cors = require("cors");
-
-app.use(cors({
-  origin: ["https://jobly-backend-ds7w.onrender.com"], // Your frontend URL
-  methods: ["GET", "POST", "PATCH", "DELETE"],
-  allowedHeaders: ["Authorization", "Content-Type"],
-}));
 
 /** Generic error handler; anything unhandled goes here. */
 app.use(function (err, req, res, next) {
@@ -56,3 +53,4 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
