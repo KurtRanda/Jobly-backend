@@ -16,7 +16,7 @@ const app = express();
 
 // Enable CORS for frontend
 app.use(cors({
-  origin: ["https://jobly-frontend-axcj.onrender.com"], // Add your frontend URL
+  origin: ["https://jobly-frontend-axcj.onrender.com"], 
   methods: ["GET", "POST", "PATCH", "DELETE"],
   allowedHeaders: ["Authorization", "Content-Type"],
 }));
