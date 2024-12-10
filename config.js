@@ -1,5 +1,8 @@
 "use strict";
 
+const { config } = require("dotenv");
+const db = require("./db");
+
 /** Shared config for application; can be required many places. */
 
 require("dotenv").config();
@@ -16,10 +19,15 @@ function getDatabaseUri() {
     : process.env.DATABASE_URL || "jobly"; // Default to Supabase connection or local
 }
 
+// Configure database SSL settings for Supabase
+const DB_CONFIG = {
+  connectionString: getDatabaseUri(),
+  ssl: {
+    rejectUnauthorized: false, // Required for Supabase connections
+  },
+};
 
 // Speed up bcrypt during tests, since the algorithm safety isn't being tested
-//
-// WJB: Evaluate in 2021 if this should be increased to 13 for non-test use
 const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === "test" ? 1 : 12;
 
 console.log("Jobly Config:".green);
@@ -34,4 +42,5 @@ module.exports = {
   PORT,
   BCRYPT_WORK_FACTOR,
   getDatabaseUri,
+  DB_CONFIG, // Exporting DB_CONFIG for database connections
 };
