@@ -1,8 +1,5 @@
 "use strict";
 
-const { config } = require("dotenv");
-const db = require("./db");
-
 /** Shared config for application; can be required many places. */
 
 require("dotenv").config();

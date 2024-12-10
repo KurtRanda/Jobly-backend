@@ -21,9 +21,15 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Attempt to connect to the database and log the status
-db.connect()
-  .then(() => console.log("Connected to the database"))
-  .catch((err) => console.error("Database connection error:", err));
+(async function connectToDB() {
+  try {
+    await db.connect();
+    console.log("Connected to the database".green);
+  } catch (err) {
+    console.error("Database connection error:".red, err);
+    process.exit(1); // Exit the process if the database connection fails
+  }
+})();
 
 module.exports = db;
 
