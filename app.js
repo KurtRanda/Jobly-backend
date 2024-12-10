@@ -36,6 +36,14 @@ app.use(function (req, res, next) {
   return next(new NotFoundError());
 });
 
+const cors = require("cors");
+
+app.use(cors({
+  origin: ["https://jobly-backend-ds7w.onrender.com"], // Your frontend URL
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  allowedHeaders: ["Authorization", "Content-Type"],
+}));
+
 /** Generic error handler; anything unhandled goes here. */
 app.use(function (err, req, res, next) {
   if (process.env.NODE_ENV !== "test") console.error(err.stack);
