@@ -2,24 +2,28 @@
 
 /** Database setup for Jobly. */
 const { Client } = require("pg");
-const { DB_CONFIG, getDatabaseUri } = require("./config");
+const { getDatabaseUri } = require("./config");
 
 let db;
 
-// Use DB_CONFIG for production, and ensure SSL is configured for Supabase
+// Configure database connection for production and development environments
 if (process.env.NODE_ENV === "production") {
-  db = new Client(DB_CONFIG); // Use DB_CONFIG from config.js
-} else {
   db = new Client({
     connectionString: getDatabaseUri(),
     ssl: {
       rejectUnauthorized: false, // Required for connecting to Supabase
-    }, // Use getDatabaseUri for local/testing environments
+    },
+  });
+} else {
+  db = new Client({
+    connectionString: getDatabaseUri(),
   });
 }
 
+// Attempt to connect to the database and log the status
 db.connect()
   .then(() => console.log("Connected to the database"))
   .catch((err) => console.error("Database connection error:", err));
 
 module.exports = db;
+
